@@ -743,17 +743,15 @@
                                 </customSpacing>
                             </stackView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="YoG-c4-dYH" customClass="RZVideoPlayView">
-                                <rect key="frame" x="20" y="10" width="320" height="240"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="240" id="QGm-Dd-AwX"/>
-                                    <constraint firstAttribute="width" constant="320" id="VsS-1M-FT1"/>
-                                </constraints>
+                                <rect key="frame" x="20" y="10" width="378" height="240"/>
                             </customView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="WkE-AK-1Ba" firstAttribute="leading" secondItem="YoG-c4-dYH" secondAttribute="trailing" constant="10" id="3il-K1-Am6"/>
                             <constraint firstAttribute="trailing" secondItem="Fjw-Ib-Ckj" secondAttribute="trailing" constant="20" symbolic="YES" id="a1N-Lt-bDb"/>
                             <constraint firstItem="YoG-c4-dYH" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="aOS-P3-DpH"/>
                             <constraint firstItem="YoG-c4-dYH" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="cSk-jO-t9b"/>
+                            <constraint firstAttribute="bottom" secondItem="YoG-c4-dYH" secondAttribute="bottom" constant="10" id="xob-Rp-iks"/>
                             <constraint firstAttribute="bottom" secondItem="Fjw-Ib-Ckj" secondAttribute="bottom" constant="20" symbolic="YES" id="yTy-rv-xNY"/>
                         </constraints>
                     </view>

@@ -161,7 +161,13 @@
     
     [self destory];
     
+#if USE_HW_ENCODER
+    _codec = avcodec_find_encoder_by_name("h264_videotoolbox");
+#else
     _codec = avcodec_find_encoder(AV_CODEC_ID_H264);
+#endif
+    
+    
     if (!_codec) {
         return NO;
     }
@@ -174,7 +180,7 @@
     _context->codec_type = AVMEDIA_TYPE_VIDEO;
     _context->pix_fmt = AV_PIX_FMT_NV12;
     
-    _context->bit_rate = 400000;
+    _context->bit_rate = 1200 * 1024;
     _context->width = config.dimension.width;
     _context->height = config.dimension.height;
     
@@ -225,6 +231,8 @@
      */
     av_opt_set(_context->priv_data, "profile", "high", 0);
 
+    //TODO: color range
+    _context->color_range = AVCOL_RANGE_MPEG;
     /*
      open it
      */

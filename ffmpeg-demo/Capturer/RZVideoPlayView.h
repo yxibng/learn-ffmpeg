@@ -42,6 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+- (void)displayNV12:(void *)y
+                  uv:(void *)uv
+           stride_y:(int)stride_y
+           stride_uv:(int)stride_uv
+              width:(int)width
+             height:(int)height;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

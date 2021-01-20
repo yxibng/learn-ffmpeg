@@ -169,13 +169,13 @@ typedef NS_ENUM(NSInteger, AVCamSetupResult) {
     //add video data output
     AVCaptureVideoDataOutput *output = [[AVCaptureVideoDataOutput alloc] init];
 #if TARGET_OS_OSX
-    NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+    NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange),
                                (NSString *)kCVPixelBufferWidthKey : @(self.videoConfig.dimension.width),
                                (NSString *)kCVPixelBufferHeightKey : @(self.videoConfig.dimension.height)
 
     };
 #else
-    NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) };
+    NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) };
 #endif
     output.videoSettings = settings;
 
@@ -320,9 +320,9 @@ typedef NS_ENUM(NSInteger, AVCamSetupResult) {
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     //这里需要做一下丢帧处理
-//    if ([self shouldDisposeBuffer:sampleBuffer]) {
-//        return;
-//    }
+    if ([self shouldDisposeBuffer:sampleBuffer]) {
+        return;
+    }
     
 #if TARGET_OS_OSX
     BOOL isFront = YES;
@@ -385,7 +385,7 @@ typedef NS_ENUM(NSInteger, AVCamSetupResult) {
         [self.session beginConfiguration];
 
 #if TARGET_OS_OSX
-        NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+        NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange),
                                    (NSString *)kCVPixelBufferWidthKey : @(self.videoConfig.dimension.width),
                                    (NSString *)kCVPixelBufferHeightKey : @(self.videoConfig.dimension.height)
 
@@ -415,7 +415,7 @@ typedef NS_ENUM(NSInteger, AVCamSetupResult) {
         [self.session beginConfiguration];
 
 #if TARGET_OS_OSX
-        NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+        NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange),
                                    (NSString *)kCVPixelBufferWidthKey : @(self.videoConfig.dimension.width),
                                    (NSString *)kCVPixelBufferHeightKey : @(self.videoConfig.dimension.height)
 

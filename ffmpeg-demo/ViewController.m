@@ -13,6 +13,9 @@
 #import "RZVideoPlayView.h"
 
 
+#import "RZVideoHwDecoder.h"
+
+
 static uint64_t rz_milliseconds(void)
 {
     static mach_timebase_info_data_t sTimebaseInfo;
@@ -34,8 +37,9 @@ static uint64_t rz_milliseconds(void)
 
 @property (nonatomic, strong) RZVideoCapturer *videoCapturer;
 @property (nonatomic, strong) RZVideoEncoder *videoEncoder;
-@property (nonatomic, strong) RZVideoDecoder *videoDecoder;
 @property (nonatomic, strong) dispatch_queue_t encodeQueue;
+
+@property (nonatomic, strong) RZVideoDecoder *videoDecoder;
 
 @property (weak) IBOutlet RZVideoPlayView *playView;
 
@@ -48,14 +52,18 @@ static uint64_t rz_milliseconds(void)
     [super viewDidLoad];
 
     _videoCapturer = [[RZVideoCapturer alloc] init];
+    
+    //默认采集{1280,720}, 15fps
+    DbyCapturerConfig config;
+    config.dimension = CGSizeMake(1280, 720);
+    config.frameRate = 15;
+    [_videoCapturer setVideoConfig:config];
     _videoCapturer.delegate = self;
     
     _videoEncoder = [[RZVideoEncoder alloc] initWithDelegate:self];
     _videoDecoder = [[RZVideoDecoder alloc] initWithDelegate:self];
     
     _encodeQueue = dispatch_queue_create("com.video.encode.queue", DISPATCH_QUEUE_SERIAL);
-    
-    // Do any additional setup after loading the view.
 }
 
 
@@ -100,7 +108,6 @@ static uint64_t rz_milliseconds(void)
               height:(int)height
           pix_format:(RZYUVType)pix_format
 {
-    NSLog(@"%s, width = %d, heigth = %d, format = %@", __FUNCTION__, width, height, pix_format == RZYUVTypeNV12 ? @"nv12" : @"I420" );
     
     if (pix_format == RZYUVTypeI420) {
         
@@ -121,8 +128,27 @@ static uint64_t rz_milliseconds(void)
                              width:width
                             height:height];
         
-        
+        return;
     }
+    
+    
+    if (pix_format == RZYUVTypeNV12) {
+        uint8_t *y =  data[0];
+        uint8_t *uv =  data[1];
+        
+        int stride_y = yuvStride[0];
+        int stride_uv = yuvStride[1];
+        
+        [self.playView displayNV12:y
+                                uv:uv
+                          stride_y:stride_y
+                         stride_uv:stride_uv
+                             width:width
+                            height:height];
+        
+        return;
+    }
+    
     
     
     

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
+#import "RZCodec.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -1,8 +1,8 @@
 //
-//  RZVideoDecoder.h
+//  RZVideoHwDecoder.h
 //  ffmpeg-demo
 //
-//  Created by yxibng on 2021/1/19.
+//  Created by yxibng on 2021/1/20.
 //
 
 #import <Foundation/Foundation.h>
@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class RZVideoDecoder;
-@protocol RZVideoDecoderDelegate <NSObject>
+@class RZVideoHwDecoder;
+@protocol RZVideoHwDecoderDelegate <NSObject>
 
-- (void)videoDecoder:(RZVideoDecoder *)videoDecoder
+- (void)videoHwDecoder:(RZVideoHwDecoder *)videoDecoder
   receiveDecodedData:(uint8_t *_Nonnull*_Nonnull)data
            yuvStride:(int *)yuvStride
                width:(int)width
@@ -22,16 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface RZVideoHwDecoder : NSObject
 
-@interface RZVideoDecoder : NSObject
 
+@property (nonatomic, weak) id<RZVideoHwDecoderDelegate>delegate;
 
-@property (nonatomic, weak) id<RZVideoDecoderDelegate>delegate;
-
-- (instancetype)initWithDelegate:(id<RZVideoDecoderDelegate>)delegate;
+- (instancetype)initWithDelegate:(id<RZVideoHwDecoderDelegate>)delegate;
 
 - (void)decodeH264:(void *)packet length:(int)length timestamp:(NSTimeInterval)timestamp;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -13,8 +13,9 @@
 #include <libavutil/opt.h>
 #include <libswscale/swscale.h>
 
+#import "RZVideoHwDecoder.h"
 
-@interface RZVideoDecoder ()
+@interface RZVideoDecoder () <RZVideoHwDecoderDelegate>
 {
     AVCodec *_codec;
     AVCodecContext *_context;
@@ -25,6 +26,7 @@
 
 @property (nonatomic, assign) BOOL setupSuccess;
 
+@property (nonatomic, strong) RZVideoHwDecoder *hwDecoder;
 
 @end
 
@@ -42,6 +44,7 @@
     self = [super init];
     if (self) {
         _delegate = delegate;
+        _hwDecoder = [[RZVideoHwDecoder alloc] initWithDelegate:self];
     }
     return self;
 }
@@ -51,6 +54,11 @@
     if (!packet) {
         return;
     }
+
+#if USE_HW_DECODER
+    [_hwDecoder decodeH264:packet length:length timestamp:timestamp];
+    return;
+#endif
     
     if (!self.setupSuccess) {
         BOOL ret = [self setup];
@@ -126,12 +134,7 @@
             } else {
                 //not support
             }
-            
-            
-
         }
-        
-        
     }
 }
 
@@ -141,6 +144,7 @@
     [self destroy];
     
     _codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+
     if (!_codec) {
         return NO;
     }
@@ -195,6 +199,17 @@
 
 
 
+#pragma mark -
+- (void)videoHwDecoder:(RZVideoHwDecoder *)videoDecoder receiveDecodedData:(uint8_t * _Nonnull *)data yuvStride:(int *)yuvStride width:(int)width height:(int)height pix_format:(RZYUVType)pix_format {
+    if ([self.delegate respondsToSelector:@selector(videoDecoder:receiveDecodedData:yuvStride:width:height:pix_format:)]) {
+        [self.delegate videoDecoder:self
+                 receiveDecodedData:data
+                          yuvStride:yuvStride
+                              width:width
+                             height:height
+                         pix_format:pix_format];
+    }
+}
 
 
 @end

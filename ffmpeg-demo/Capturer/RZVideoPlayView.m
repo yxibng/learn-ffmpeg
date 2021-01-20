@@ -14,15 +14,26 @@ static int NV12Copy(uint8_t *src_y, int src_stride_y,
                     uint8_t *dst_uv, int dst_stride_uv,
                     int width, int height) {
     
-    void *middle_u = malloc(width * height * 0.25 + 10);
-    void *middle_v = malloc(width * height * 0.25 + 10);
-    int middle_stride_u = width / 2;
-    int middle_stride_v = width / 2;
-    SplitUVPlane(src_uv, src_stride_uv, middle_u, middle_stride_u, middle_v, middle_stride_v, width, height);
-    CopyPlane(src_y, src_stride_y, dst_y, dst_stride_y, width, height);
-    MergeUVPlane(middle_u, middle_stride_u,
-                 middle_v, middle_stride_u,
-                 dst_uv, dst_stride_uv, width, height);
+    void *middle_u = malloc(src_stride_uv * height / 2);
+    void *middle_v = malloc(src_stride_uv * height / 2);
+    int halfWidth = (width + 1) >> 1;
+    int halfHeight = (height + 1) >> 1;
+    
+    
+    SplitUVPlane(src_uv, src_stride_uv,
+                 middle_u, halfWidth,
+                 middle_v, halfWidth,
+                 halfWidth, halfHeight);
+    
+    CopyPlane(src_y, src_stride_y,
+              dst_y, dst_stride_y,
+              width, height);
+    
+    MergeUVPlane(middle_u, halfWidth,
+                 middle_v, halfWidth,
+                 dst_uv, dst_stride_uv,
+                 halfWidth, halfHeight);
+    
     free(middle_u);
     free(middle_v);
     return 0;
@@ -232,7 +243,7 @@ static int NV12Copy(uint8_t *src_y, int src_stride_y,
     
     CVPixelBufferRef pixelBuffer;
     NSDictionary *att = @{(NSString *)kCVPixelBufferIOSurfacePropertiesKey : @{}};
-    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarFullRange,   (__bridge CFDictionaryRef _Nullable)att, &pixelBuffer);
+    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,   (__bridge CFDictionaryRef _Nullable)att, &pixelBuffer);
     if (ret != kCVReturnSuccess) {
         return;
     }
@@ -280,7 +291,7 @@ static int NV12Copy(uint8_t *src_y, int src_stride_y,
     }
     
     CVPixelBufferRef pixelBuffer;
-    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, nil, &pixelBuffer);
+    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, nil, &pixelBuffer);
     if (ret != kCVReturnSuccess) {
         return;
     }
@@ -328,7 +339,7 @@ static int NV12Copy(uint8_t *src_y, int src_stride_y,
     
     CVPixelBufferRef pixelBuffer;
     NSDictionary *att = @{(NSString *)kCVPixelBufferIOSurfacePropertiesKey : @{}};
-    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarFullRange,   (__bridge CFDictionaryRef _Nullable)att, &pixelBuffer);
+    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,   (__bridge CFDictionaryRef _Nullable)att, &pixelBuffer);
     if (ret != kCVReturnSuccess) {
         return;
     }
@@ -365,5 +376,47 @@ static int NV12Copy(uint8_t *src_y, int src_stride_y,
     
 }
 
+
+- (void)displayNV12:(void *)y
+                  uv:(void *)uv
+           stride_y:(int)stride_y
+           stride_uv:(int)stride_uv
+              width:(int)width
+             height:(int)height {
+ 
+    
+    CVPixelBufferRef pixelBuffer;
+    NSDictionary *att = @{(NSString *)kCVPixelBufferIOSurfacePropertiesKey : @{}};
+    CVReturn ret =  CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef _Nullable)att, &pixelBuffer);
+    if (ret != kCVReturnSuccess) {
+        return;
+    }
+    
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    
+    uint8_t *src_y = y;
+    uint8_t *src_uv = uv;
+
+    int src_stride_y = stride_y;
+    int src_stride_uv = stride_uv;
+    
+    uint8_t *dst_y = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    uint8_t *dst_uv = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+    
+    int dst_stride_y = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+    int dst_stride_uv = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+    
+    NV12Copy(src_y, src_stride_y,
+             src_uv, src_stride_uv,
+             dst_y, dst_stride_y,
+             dst_uv, dst_stride_uv,
+             width, height);
+
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    [self displayPixelBuffer:pixelBuffer];
+    CVPixelBufferRelease(pixelBuffer);
+    
+    
+}
 
 @end

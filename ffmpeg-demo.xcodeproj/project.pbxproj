@@ -12,6 +12,7 @@
 		8641046925B68BEC00B6B13A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8641046525B68BC500B6B13A /* libz.tbd */; };
 		8641047225B6D25400B6B13A /* RZVideoPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641047025B6D25400B6B13A /* RZVideoPlayView.m */; };
 		8641048E25B6D29300B6B13A /* libyuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8641047825B6D29300B6B13A /* libyuv.a */; };
+		8641049825B7C4BD00B6B13A /* RZVideoHwDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641049725B7C4BD00B6B13A /* RZVideoHwDecoder.m */; };
 		865AC4E825B671B3005DB689 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC4E725B671B3005DB689 /* AppDelegate.m */; };
 		865AC4EB25B671B3005DB689 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC4EA25B671B3005DB689 /* ViewController.m */; };
 		865AC4ED25B671B5005DB689 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 865AC4EC25B671B5005DB689 /* Assets.xcassets */; };
@@ -67,6 +68,9 @@
 		8641048B25B6D29300B6B13A /* rotate_argb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rotate_argb.h; sourceTree = "<group>"; };
 		8641048C25B6D29300B6B13A /* macros_msa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros_msa.h; sourceTree = "<group>"; };
 		8641048D25B6D29300B6B13A /* row.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = row.h; sourceTree = "<group>"; };
+		8641049225B7B91500B6B13A /* RZCodec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZCodec.h; sourceTree = "<group>"; };
+		8641049625B7C4BD00B6B13A /* RZVideoHwDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZVideoHwDecoder.h; sourceTree = "<group>"; };
+		8641049725B7C4BD00B6B13A /* RZVideoHwDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZVideoHwDecoder.m; sourceTree = "<group>"; };
 		865AC4E325B671B3005DB689 /* ffmpeg-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ffmpeg-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		865AC4E625B671B3005DB689 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		865AC4E725B671B3005DB689 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -602,6 +606,9 @@
 				865AC5BD25B673B6005DB689 /* RZVideoEncoder.m */,
 				865AC5C025B673C1005DB689 /* RZVideoDecoder.h */,
 				865AC5C125B673C1005DB689 /* RZVideoDecoder.m */,
+				8641049225B7B91500B6B13A /* RZCodec.h */,
+				8641049625B7C4BD00B6B13A /* RZVideoHwDecoder.h */,
+				8641049725B7C4BD00B6B13A /* RZVideoHwDecoder.m */,
 			);
 			path = codec;
 			sourceTree = "<group>";
@@ -698,6 +705,7 @@
 				8641047225B6D25400B6B13A /* RZVideoPlayView.m in Sources */,
 				865AC5C225B673C1005DB689 /* RZVideoDecoder.m in Sources */,
 				865AC50225B67250005DB689 /* RZVideoCapturerUtil.m in Sources */,
+				8641049825B7C4BD00B6B13A /* RZVideoHwDecoder.m in Sources */,
 				865AC4EB25B671B3005DB689 /* ViewController.m in Sources */,
 				865AC50125B67250005DB689 /* RZVideoCapturer.m in Sources */,
 				865AC4F325B671B5005DB689 /* main.m in Sources */,
