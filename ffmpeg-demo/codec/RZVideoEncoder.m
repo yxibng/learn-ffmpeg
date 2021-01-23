@@ -189,9 +189,10 @@
     
     _context->gop_size = 10;
     _context->max_b_frames = 1;
-    
     av_opt_set(_context->priv_data, "coder", "cabac", 0);
     av_opt_set(_context->priv_data, "x264-params", "ref=1:deblock=1,1:analyse=p8x8:8x8dct=1", 0);
+    //在硬件编码不支持的情况下切换到软件编码
+    av_opt_set(_context->priv_data, "allow_sw", "1", 0);
     /*
      ultrafast
      superfast
