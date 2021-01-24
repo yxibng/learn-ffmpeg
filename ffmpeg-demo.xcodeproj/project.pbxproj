@@ -13,6 +13,8 @@
 		8641047225B6D25400B6B13A /* RZVideoPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641047025B6D25400B6B13A /* RZVideoPlayView.m */; };
 		8641048E25B6D29300B6B13A /* libyuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8641047825B6D29300B6B13A /* libyuv.a */; };
 		8641049825B7C4BD00B6B13A /* RZVideoHwDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641049725B7C4BD00B6B13A /* RZVideoHwDecoder.m */; };
+		864E81EC25BC7184005FC6AC /* HWEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 864E81EB25BC7184005FC6AC /* HWEncoder.m */; };
+		864E81F025BC7190005FC6AC /* HWDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 864E81EF25BC7190005FC6AC /* HWDecoder.m */; };
 		865AC4E825B671B3005DB689 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC4E725B671B3005DB689 /* AppDelegate.m */; };
 		865AC4EB25B671B3005DB689 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC4EA25B671B3005DB689 /* ViewController.m */; };
 		865AC4ED25B671B5005DB689 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 865AC4EC25B671B5005DB689 /* Assets.xcassets */; };
@@ -71,6 +73,10 @@
 		8641049225B7B91500B6B13A /* RZCodec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZCodec.h; sourceTree = "<group>"; };
 		8641049625B7C4BD00B6B13A /* RZVideoHwDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZVideoHwDecoder.h; sourceTree = "<group>"; };
 		8641049725B7C4BD00B6B13A /* RZVideoHwDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZVideoHwDecoder.m; sourceTree = "<group>"; };
+		864E81EA25BC7184005FC6AC /* HWEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HWEncoder.h; sourceTree = "<group>"; };
+		864E81EB25BC7184005FC6AC /* HWEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HWEncoder.m; sourceTree = "<group>"; };
+		864E81EE25BC7190005FC6AC /* HWDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HWDecoder.h; sourceTree = "<group>"; };
+		864E81EF25BC7190005FC6AC /* HWDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HWDecoder.m; sourceTree = "<group>"; };
 		865AC4E325B671B3005DB689 /* ffmpeg-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ffmpeg-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		865AC4E625B671B3005DB689 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		865AC4E725B671B3005DB689 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -300,6 +306,17 @@
 				8641048D25B6D29300B6B13A /* row.h */,
 			);
 			path = libyuv;
+			sourceTree = "<group>";
+		};
+		864E81E925BC7164005FC6AC /* VideoToolBox */ = {
+			isa = PBXGroup;
+			children = (
+				864E81EA25BC7184005FC6AC /* HWEncoder.h */,
+				864E81EB25BC7184005FC6AC /* HWEncoder.m */,
+				864E81EE25BC7190005FC6AC /* HWDecoder.h */,
+				864E81EF25BC7190005FC6AC /* HWDecoder.m */,
+			);
+			path = VideoToolBox;
 			sourceTree = "<group>";
 		};
 		865AC4DA25B671B3005DB689 = {
@@ -602,6 +619,7 @@
 		865AC5C525B673DA005DB689 /* codec */ = {
 			isa = PBXGroup;
 			children = (
+				864E81E925BC7164005FC6AC /* VideoToolBox */,
 				865AC5BC25B673B6005DB689 /* RZVideoEncoder.h */,
 				865AC5BD25B673B6005DB689 /* RZVideoEncoder.m */,
 				865AC5C025B673C1005DB689 /* RZVideoDecoder.h */,
@@ -705,7 +723,9 @@
 				8641047225B6D25400B6B13A /* RZVideoPlayView.m in Sources */,
 				865AC5C225B673C1005DB689 /* RZVideoDecoder.m in Sources */,
 				865AC50225B67250005DB689 /* RZVideoCapturerUtil.m in Sources */,
+				864E81EC25BC7184005FC6AC /* HWEncoder.m in Sources */,
 				8641049825B7C4BD00B6B13A /* RZVideoHwDecoder.m in Sources */,
+				864E81F025BC7190005FC6AC /* HWDecoder.m in Sources */,
 				865AC4EB25B671B3005DB689 /* ViewController.m in Sources */,
 				865AC50125B67250005DB689 /* RZVideoCapturer.m in Sources */,
 				865AC4F325B671B5005DB689 /* main.m in Sources */,
