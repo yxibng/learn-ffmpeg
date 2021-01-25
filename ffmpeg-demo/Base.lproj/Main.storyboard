@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="FR2-N1-Ffa">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -688,7 +688,7 @@
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
                         </connections>
@@ -762,6 +762,93 @@
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="655"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="Hjo-7N-ifS">
+            <objects>
+                <windowController id="FR2-N1-Ffa" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Jze-fz-5Gr">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="294" y="313" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+                        <view key="contentView" id="WSo-w9-LUj">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="FR2-N1-Ffa" id="aLl-DU-nrW"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="pZ3-kQ-hve" kind="relationship" relationship="window.shadowedContentViewController" id="VWw-6H-qqJ"/>
+                    </connections>
+                </windowController>
+                <customObject id="Vw8-to-ChJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-573" y="154"/>
+        </scene>
+        <!--Codec View Controller-->
+        <scene sceneID="Rvr-l8-agU">
+            <objects>
+                <viewController id="pZ3-kQ-hve" customClass="HWCodecViewController" sceneMemberID="viewController">
+                    <view key="view" id="64o-T7-HR0">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RAy-Tb-FWH">
+                                <rect key="frame" x="408" y="20" width="52" height="50"/>
+                                <subviews>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6mg-NR-k4l">
+                                        <rect key="frame" x="-7" y="23" width="66" height="32"/>
+                                        <buttonCell key="cell" type="push" title="start " bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lFG-aK-5az">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="start:" target="pZ3-kQ-hve" id="nFn-Dr-WEg"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wKu-ZJ-kNc">
+                                        <rect key="frame" x="-5" y="-7" width="62" height="32"/>
+                                        <buttonCell key="cell" type="push" title="stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hrU-o8-UNg">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="stop:" target="pZ3-kQ-hve" id="U3t-P1-oVP"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="59Q-3w-le4" customClass="RZVideoPlayView">
+                                <rect key="frame" x="20" y="10" width="378" height="240"/>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="59Q-3w-le4" firstAttribute="top" secondItem="64o-T7-HR0" secondAttribute="top" constant="20" symbolic="YES" id="37p-Wx-Izj"/>
+                            <constraint firstItem="6mg-NR-k4l" firstAttribute="leading" secondItem="59Q-3w-le4" secondAttribute="trailing" constant="10" id="5aa-iF-2q5"/>
+                            <constraint firstAttribute="bottom" secondItem="RAy-Tb-FWH" secondAttribute="bottom" constant="20" symbolic="YES" id="GCE-Uk-KkJ"/>
+                            <constraint firstAttribute="trailing" secondItem="RAy-Tb-FWH" secondAttribute="trailing" constant="20" symbolic="YES" id="YhG-C6-99H"/>
+                            <constraint firstItem="59Q-3w-le4" firstAttribute="leading" secondItem="64o-T7-HR0" secondAttribute="leading" constant="20" symbolic="YES" id="ZgS-61-xdH"/>
+                            <constraint firstAttribute="bottom" secondItem="59Q-3w-le4" secondAttribute="bottom" constant="10" id="n7R-7G-xXS"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="playView" destination="59Q-3w-le4" id="hni-dz-o0D"/>
+                    </connections>
+                </viewController>
+                <customObject id="8JU-66-TRs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-583" y="638"/>
         </scene>
     </scenes>
 </document>

@@ -40,6 +40,7 @@
 		865AC5B025B6728A005DB689 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 865AC5A225B6728A005DB689 /* libswscale.a */; };
 		865AC5BE25B673B6005DB689 /* RZVideoEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC5BD25B673B6005DB689 /* RZVideoEncoder.m */; };
 		865AC5C225B673C1005DB689 /* RZVideoDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 865AC5C125B673C1005DB689 /* RZVideoDecoder.m */; };
+		8668DC3025BE572A00CC853C /* HWCodecViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8668DC2F25BE572A00CC853C /* HWCodecViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -236,6 +237,8 @@
 		865AC5BD25B673B6005DB689 /* RZVideoEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZVideoEncoder.m; sourceTree = "<group>"; };
 		865AC5C025B673C1005DB689 /* RZVideoDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZVideoDecoder.h; sourceTree = "<group>"; };
 		865AC5C125B673C1005DB689 /* RZVideoDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RZVideoDecoder.m; sourceTree = "<group>"; };
+		8668DC2E25BE572A00CC853C /* HWCodecViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HWCodecViewController.h; sourceTree = "<group>"; };
+		8668DC2F25BE572A00CC853C /* HWCodecViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HWCodecViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +356,8 @@
 				865AC4F125B671B5005DB689 /* Info.plist */,
 				865AC4F225B671B5005DB689 /* main.m */,
 				865AC4F425B671B5005DB689 /* ffmpeg_demo.entitlements */,
+				8668DC2E25BE572A00CC853C /* HWCodecViewController.h */,
+				8668DC2F25BE572A00CC853C /* HWCodecViewController.mm */,
 			);
 			path = "ffmpeg-demo";
 			sourceTree = "<group>";
@@ -722,6 +727,7 @@
 			files = (
 				8641047225B6D25400B6B13A /* RZVideoPlayView.m in Sources */,
 				865AC5C225B673C1005DB689 /* RZVideoDecoder.m in Sources */,
+				8668DC3025BE572A00CC853C /* HWCodecViewController.mm in Sources */,
 				865AC50225B67250005DB689 /* RZVideoCapturerUtil.m in Sources */,
 				864E81EC25BC7184005FC6AC /* HWEncoder.m in Sources */,
 				8641049825B7C4BD00B6B13A /* RZVideoHwDecoder.m in Sources */,

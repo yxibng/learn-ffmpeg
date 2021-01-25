@@ -8,6 +8,12 @@
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 
+/*
+ 参考：
+ https://stackoverflow.com/questions/29525000/how-to-use-videotoolbox-to-decompress-h-264-video-stream
+ */
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class HWDecoder;

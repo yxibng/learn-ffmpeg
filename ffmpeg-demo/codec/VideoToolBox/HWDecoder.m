@@ -60,6 +60,10 @@ void decodeCallback (
         return YES;
     }
     
+    if (!_sps || !_pps) {
+        return NO;
+    }
+    
     const uint8_t * const sps_pps[2] = {
         _sps, _pps
     };
@@ -76,7 +80,8 @@ void decodeCallback (
     
     NSDictionary *destinationPixelBufferAttributes = @{
         //解码为nv12
-        (id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+        (id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+        (id)kCVPixelFormatCodecType:@(kCMVideoCodecType_H264)
     };
     
     
@@ -117,19 +122,20 @@ void decodeCallback (
      需要先拿到 sps 和 pps 构建 编码session
      之后根据 sps 和 pps 进行解码
      
-
      替换start code 为 nalu length
      TODO: 这里修改了原始数据，不太好
     */
-    uint32_t naluSize = (uint32_t)(size - 4);
-    uint8_t *pNaluSize = (uint8_t *)(&naluSize);
-    memcmp(frame, pNaluSize, 4);
     
-    
-    int nalu_type = frame[4] & 0x1f;
-    
+    /*
+     系统端转大端
+     */
+    uint32_t naluSize = CFSwapInt32HostToBig(size - 4);
+    void *pNaluSize = (void *)(&naluSize);
+    memcpy(frame, pNaluSize, 4);
+        
+    int nalu_type = frame[4] & 0x1F;
     switch (nalu_type) {
-        case 0x5:
+        case 0x05:
             //关键帧
         {
             if ([self initH264Decoder]) {
@@ -137,15 +143,15 @@ void decodeCallback (
             }
         }
             break;
-        case 0x7:
+        case 0x07:
             //sps
-            _spsSize = size = 4;
+            _spsSize = size - 4;
             _sps = realloc(_sps, _spsSize);
             memcpy(_sps, &frame[4], _spsSize);
             break;
-        case 0x8:
+        case 0x08:
             //pps
-            _ppsSize = size = 4;
+            _ppsSize = size - 4;
             _pps = realloc(_pps, _ppsSize);
             memcpy(_pps, &frame[4], _ppsSize);
             break;
@@ -196,10 +202,10 @@ void decodeCallback (
     
     CMBlockBufferRef blockBuffer = NULL;
     OSStatus status = CMBlockBufferCreateWithMemoryBlock(NULL, (void *)data, size, NULL, NULL, 0, size, kCMBlockBufferAssureMemoryNowFlag, &blockBuffer);
-    if (status != noErr) {
+    if (status != kCMBlockBufferNoErr) {
         return;
     }
-    
+        
     CMSampleBufferRef sampleBuffer = NULL;
     const size_t sampleSizeArray[] = {size};
     
@@ -227,9 +233,11 @@ void decodeCallback (
         }
         goto failed;
     }
+    goto failed;
 failed:
-    CFRelease(blockBuffer);
-    CFRelease(sampleBuffer);
+    if (sampleBuffer) {    
+        CFRelease(sampleBuffer);
+    }
     
 }
 

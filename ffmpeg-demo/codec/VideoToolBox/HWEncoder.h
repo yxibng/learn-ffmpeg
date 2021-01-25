@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HWEncoderDelegate <NSObject>
 
 - (void)hwEncoder:(HWEncoder *)hwEncoder gotSps:(NSData *)sps pps:(NSData *)pps;
-- (void)hwEncoder:(HWEncoder *)hwEncoder gotEncodedData:(NSData *)sps isKeyFrame:(BOOL)isKeyFrame;
+- (void)hwEncoder:(HWEncoder *)hwEncoder gotEncodedData:(NSData *)data isKeyFrame:(BOOL)isKeyFrame;
 
 @end
 

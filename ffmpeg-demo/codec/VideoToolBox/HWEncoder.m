@@ -43,10 +43,14 @@ void hw_CompressionOutputCallback (
     }
     CFArrayRef attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true);
     CFDictionaryRef theAttachment = CFArrayGetValueAtIndex(attachments, 0);
-    BOOL keyFrame = CFDictionaryContainsKey(theAttachment, kCMSampleAttachmentKey_NotSync);
+    Boolean keyFrame = false;
+    const void *value;
+    BOOL has = CFDictionaryGetValueIfPresent(theAttachment, kCMSampleAttachmentKey_NotSync, &value);
+    if (has) {
+        keyFrame = CFBooleanGetValue((CFBooleanRef)value);
+    }
     
     HWEncoder *encoder = (__bridge HWEncoder *)outputCallbackRefCon;
-    
     if (keyFrame) {
         /*
         关键帧，分离sps， pps
@@ -55,31 +59,27 @@ void hw_CompressionOutputCallback (
         CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
         size_t spsSetSize, spsSetCount;
         const uint8_t *sps;
-        OSStatus status = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
+        OSStatus spsStatus = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
                                                                              0,
                                                                              &sps,
                                                                              &spsSetSize,
                                                                              &spsSetCount,
                                                                              NULL);
-        if (status == noErr) {
-            size_t ppsSetSize, ppsSetCount;
-            const uint8_t *pps;
-            status = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
-                                                                        1,
-                                                                        &pps,
-                                                                        &ppsSetSize,
-                                                                        &ppsSetCount,
-                                                                        NULL);
-            
-            if (status == noErr) {
-                NSData *spsData = [NSData dataWithBytes:sps length:spsSetSize];
-                NSData *ppsData = [NSData dataWithBytes:pps length:ppsSetSize];
-                
-                if ([encoder.delegate respondsToSelector:@selector(hwEncoder:gotSps:pps:)]) {
-                    [encoder.delegate hwEncoder:encoder gotSps:spsData pps:ppsData];
-                }
+        size_t ppsSetSize, ppsSetCount;
+        const uint8_t *pps;
+        OSStatus ppsStatus = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
+                                                                    1,
+                                                                    &pps,
+                                                                    &ppsSetSize,
+                                                                    &ppsSetCount,
+                                                                    NULL);
+        
+        if (spsStatus == noErr && ppsStatus == noErr) {
+            NSData *spsData = [NSData dataWithBytes:sps length:spsSetSize];
+            NSData *ppsData = [NSData dataWithBytes:pps length:ppsSetSize];
+            if ([encoder.delegate respondsToSelector:@selector(hwEncoder:gotSps:pps:)]) {
+                [encoder.delegate hwEncoder:encoder gotSps:spsData pps:ppsData];
             }
-
         }
     }
     
@@ -123,9 +123,9 @@ void hw_CompressionOutputCallback (
         if ([encoder.delegate respondsToSelector:@selector(hwEncoder:gotEncodedData:isKeyFrame:)]) {
             [encoder.delegate hwEncoder:encoder gotEncodedData:data isKeyFrame:keyFrame];
         }
-        
         //移动到下一个NALU单元
-        dataPtr += avccHeaderLength + naluLength;
+        bufferOffset += avccHeaderLength + naluLength;
+        dataPtr += bufferOffset;
     }
 }
 
@@ -175,7 +175,7 @@ void hw_CompressionOutputCallback (
         //如果解码器未创建，创建解码器
         CVPixelBufferLockBaseAddress(pixelBuffer, 0);
         size_t width = CVPixelBufferGetWidth(pixelBuffer);
-        size_t height = CVPixelBufferGetWidth(pixelBuffer);
+        size_t height = CVPixelBufferGetHeight(pixelBuffer);
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
         BOOL ret = [self setupEncoderWithSize:CGSizeMake(width, height) frameRate:_fps];
         if (!ret) {
@@ -188,14 +188,13 @@ void hw_CompressionOutputCallback (
      https://developer.apple.com/documentation/coremedia/cmtime-u58?language=objc
      */
     CMTime pts = CMTimeMake(_pts++, 600);
-    VTEncodeInfoFlags flags;
     OSStatus status = VTCompressionSessionEncodeFrame(_compressionSession,
                                                       pixelBuffer,
                                                       pts,
                                                       kCMTimeInvalid,
                                                       NULL,
                                                       NULL,
-                                                      &flags);
+                                                      NULL);
     
     if (status != noErr) {
         /*
@@ -205,7 +204,6 @@ void hw_CompressionOutputCallback (
         [self _forceToComplete];
         return;
     }
-    NSLog(@"encode success");
 }
 
 
