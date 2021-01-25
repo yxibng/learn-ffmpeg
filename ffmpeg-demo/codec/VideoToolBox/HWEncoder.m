@@ -6,6 +6,7 @@
 //
 
 #import "HWEncoder.h"
+@import CoreMedia.CMFormatDescriptionBridge;
 
 @interface HWEncoder()
 {
@@ -43,11 +44,20 @@ void hw_CompressionOutputCallback (
     }
     CFArrayRef attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true);
     CFDictionaryRef theAttachment = CFArrayGetValueAtIndex(attachments, 0);
-    Boolean keyFrame = false;
-    const void *value;
-    BOOL has = CFDictionaryGetValueIfPresent(theAttachment, kCMSampleAttachmentKey_NotSync, &value);
-    if (has) {
-        keyFrame = CFBooleanGetValue((CFBooleanRef)value);
+    Boolean keyFrame = !CFDictionaryContainsKey(theAttachment, kCMSampleAttachmentKey_NotSync);
+    
+    /*
+    关键帧，分离sps， pps
+     */
+    CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
+    size_t paramsCount;
+    int naluHeaderLength;
+    OSStatus pStatus = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format, 0, NULL, NULL, &paramsCount, &naluHeaderLength);
+    if (pStatus == kCMFormatDescriptionBridgeError_InvalidParameter) {
+        paramsCount = 2;
+        naluHeaderLength = 4;
+    } else if (pStatus != noErr) {
+        return;
     }
     
     HWEncoder *encoder = (__bridge HWEncoder *)outputCallbackRefCon;
@@ -55,8 +65,6 @@ void hw_CompressionOutputCallback (
         /*
         关键帧，分离sps， pps
          */
-        
-        CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
         size_t spsSetSize, spsSetCount;
         const uint8_t *sps;
         OSStatus spsStatus = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
@@ -80,6 +88,8 @@ void hw_CompressionOutputCallback (
             if ([encoder.delegate respondsToSelector:@selector(hwEncoder:gotSps:pps:)]) {
                 [encoder.delegate hwEncoder:encoder gotSps:spsData pps:ppsData];
             }
+        } else {
+            return;
         }
     }
     
@@ -240,13 +250,14 @@ void hw_CompressionOutputCallback (
      gop size 代表两个 IDR（立即刷新帧）之间的帧数
      https://blog.csdn.net/Liu1314you/article/details/77185215
      */
-    int gopSize = 15;
+    int gopSize = 60;
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFNumberRef)@(gopSize));
+    VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFNumberRef)@(gopSize));
+    
     /*
      设置帧率
      */
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFNumberRef)@(frameRate));
-    
     /*
      设置平均码率，单位bit
      https://www.jianshu.com/p/594164b0d70d
