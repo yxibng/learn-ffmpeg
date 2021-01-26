@@ -85,7 +85,7 @@
     uint8_t *spsBytes = (uint8_t *)[spsNalu bytes];
     uint32_t spsSize = (uint32_t)spsNalu.length;
     [self writeData:spsBytes length:spsSize];
-    [self.decoder decodeNalu:spsBytes size:spsSize];
+
     
     
     NSMutableData *ppsNalu = [NSMutableData dataWithData:splitData];
@@ -94,8 +94,9 @@
     uint8_t *ppsBytes = (uint8_t *)[ppsNalu bytes];
     uint32_t ppsSize = (uint32_t)ppsNalu.length;
     [self writeData:ppsBytes length:ppsSize];
-    [self.decoder decodeNalu:ppsBytes size:ppsSize];
 
+    //解码sps pps
+    [self.decoder decodeSps:spsBytes spsSize:spsSize pps:ppsBytes ppsSize:ppsSize];
 }
 
 - (void)hwDecoder:(nonnull HWDecoder *)hwDecoder didDecodeBuffer:(nonnull CVImageBufferRef)buffer {

@@ -108,6 +108,59 @@ void decodeCallback (
     return YES;
 }
 
+- (void)decodeSps:(uint8_t *)sps spsSize:(uint32_t)spsSize
+              pps:(uint8_t *)pps ppsSize:(uint32_t)ppsSize {
+    
+    if (!sps || !pps) {
+        return;
+    }
+
+    /*
+     去掉Annex-B header。
+     sps,pps只需要nalu即可
+     */
+    
+    uint32_t annexbHeaderLength = 4;
+
+    uint32_t spsNaluLength = spsSize - annexbHeaderLength;
+    _spsSize = spsNaluLength;
+    _sps = realloc(_sps, spsNaluLength);
+    memcpy(_sps, sps+annexbHeaderLength, spsNaluLength);
+
+    uint32_t ppsNaluLength = ppsSize - annexbHeaderLength;
+    _ppsSize = ppsNaluLength;
+    _pps = realloc(_pps, ppsNaluLength);
+    memcpy(_pps, pps+annexbHeaderLength, ppsNaluLength);
+
+    if (!_decompressionSession) {
+        [self initH264Decoder];
+        return;
+    }
+
+    const uint8_t * const sps_pps[2] = {
+        _sps, _pps
+    };
+    
+    const size_t sps_pps_size[2] = {
+        _spsSize, _ppsSize
+    };
+    
+    //用sps 和pps 实例化_decoderFormatDescription
+    CMVideoFormatDescriptionRef format;
+    OSStatus status = CMVideoFormatDescriptionCreateFromH264ParameterSets(NULL, 2, sps_pps, sps_pps_size, 4, &format);
+    if (status != noErr) {
+        return;
+    }
+    BOOL needNewSession = !VTDecompressionSessionCanAcceptFormatDescription(_decompressionSession, format);
+    CFRelease(format);
+    if (needNewSession) {
+        //重新构建session
+        [self endDecoding];
+        [self initH264Decoder];
+    }
+}
+
+
 - (void)decodeNalu:(uint8_t *)frame size:(uint32_t)size {
     
     /*

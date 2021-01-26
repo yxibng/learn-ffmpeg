@@ -51,6 +51,7 @@ void hw_CompressionOutputCallback (
      */
     CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
     size_t paramsCount;
+
     int naluHeaderLength;
     OSStatus pStatus = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format, 0, NULL, NULL, &paramsCount, &naluHeaderLength);
     if (pStatus == kCMFormatDescriptionBridgeError_InvalidParameter) {
@@ -59,7 +60,8 @@ void hw_CompressionOutputCallback (
     } else if (pStatus != noErr) {
         return;
     }
-    
+    //TODO: 根据params count 来进行取sps pps
+    assert(paramsCount >= 2);
     HWEncoder *encoder = (__bridge HWEncoder *)outputCallbackRefCon;
     if (keyFrame) {
         /*
@@ -113,7 +115,7 @@ void hw_CompressionOutputCallback (
 
      https://www.jianshu.com/p/3192162ffda1
      */
-    size_t avccHeaderLength = 4;
+    
     
     /*
     从data pointer 循环获取nalu数据
@@ -122,19 +124,19 @@ void hw_CompressionOutputCallback (
     while (bufferOffset < totalLength) {
         uint32_t naluLength = 0;
         //读取nalu 长度
-        memcpy(&naluLength, dataPtr, avccHeaderLength);
+        memcpy(&naluLength, dataPtr, naluHeaderLength);
         //大端转系统端
         naluLength = CFSwapInt32BigToHost(naluLength);
         
         //获取nalu
-        char *naluPtr = dataPtr + avccHeaderLength;
+        char *naluPtr = dataPtr + naluHeaderLength;
         NSData *data = [NSData dataWithBytes:naluPtr length:naluLength];
         //回调数据
         if ([encoder.delegate respondsToSelector:@selector(hwEncoder:gotEncodedData:isKeyFrame:)]) {
             [encoder.delegate hwEncoder:encoder gotEncodedData:data isKeyFrame:keyFrame];
         }
         //移动到下一个NALU单元
-        bufferOffset += avccHeaderLength + naluLength;
+        bufferOffset += naluHeaderLength + naluLength;
         dataPtr += bufferOffset;
     }
 }
