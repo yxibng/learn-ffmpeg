@@ -180,15 +180,17 @@
     _context->codec_type = AVMEDIA_TYPE_VIDEO;
     _context->pix_fmt = AV_PIX_FMT_NV12;
     
-    _context->bit_rate = 1200 * 1024;
+    _context->bit_rate = config.dimension.width * config.dimension.height * 3 * 8;
     _context->width = config.dimension.width;
     _context->height = config.dimension.height;
     
     _context->time_base = (AVRational){1, config.fps};
     _context->framerate = (AVRational){config.fps, 1};
     
-    _context->gop_size = 10;
-    _context->max_b_frames = 1;
+    NSLog(@"w = %f, h = %f, fps = %d, rate = %lld", config.dimension.width, config.dimension.height, config.fps, _context->bit_rate);
+    
+    _context->gop_size = config.fps;
+    _context->max_b_frames = 0;
     av_opt_set(_context->priv_data, "coder", "cabac", 0);
     av_opt_set(_context->priv_data, "x264-params", "ref=1:deblock=1,1:analyse=p8x8:8x8dct=1", 0);
     //在硬件编码不支持的情况下切换到软件编码

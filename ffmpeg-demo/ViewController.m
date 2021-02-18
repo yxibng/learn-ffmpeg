@@ -15,7 +15,6 @@
 
 #import "RZVideoHwDecoder.h"
 
-
 static uint64_t rz_milliseconds(void)
 {
     static mach_timebase_info_data_t sTimebaseInfo;
@@ -30,7 +29,6 @@ static uint64_t rz_milliseconds(void)
     uint64_t millis = ((machTime / 1e6) * sTimebaseInfo.numer) / sTimebaseInfo.denom;
     return millis;
 }
-
 
 
 @interface ViewController()<RZVideoEncoderDelegate, RZVCamDelegate, RZVideoDecoderDelegate>
@@ -72,20 +70,29 @@ static uint64_t rz_milliseconds(void)
 
     // Update the view, if already loaded.
 }
+
+
 - (IBAction)start:(id)sender {
     [_videoCapturer start];
-    
     
 }
 
 - (IBAction)stop:(id)sender {
     [_videoCapturer stop];
+    
+
 }
 
+- (void)videoCapturer:(RZVideoCapturer *)videoCapturer didStartWithReason:(RZVCamStartReason)reason {
+
+}
+
+- (void)videoCapturer:(RZVideoCapturer *)videoCapturer didStopWithReason:(RZVCamStopReason)reason {
+    
+}
 
 - (void)videoCapturer:(RZVideoCapturer *)videoCapturer didReceiveSampleBuffer:(CMSampleBufferRef)sampleBuffer isFromFrontCamera:(BOOL)isFromFrontCamera
 {
-    
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     uint64_t timestamp = rz_milliseconds();
     CVPixelBufferRetain(pixelBuffer);
@@ -97,7 +104,20 @@ static uint64_t rz_milliseconds(void)
 
 - (void)videoEncoder:(nonnull RZVideoEncoder *)videoEncoder didEncodeH264:(nonnull void *)h264Data dataLength:(int)length isKeyFrame:(BOOL)isKeyFrame timestamp:(NSTimeInterval)timestamp
 {
-//    NSLog(@"%s, lenght = %d, isKey = %d, timestamp = %f", __FUNCTION__, length, isKeyFrame, timestamp);
+    static double totalLength = 0;
+    totalLength += length;
+    
+    static double startTime = 0;
+    if (startTime == 0) {
+        startTime = [[NSDate date] timeIntervalSince1970];
+    }
+    
+    double duration = [[NSDate date] timeIntervalSince1970] - startTime;
+    if (duration > 0) {
+        double average = totalLength / duration;
+        NSLog(@"bit rate = %.0f B, duration = %f", average, duration);
+    }
+    
     [self.videoDecoder decodeH264:h264Data length:length timestamp:timestamp];
 }
 
