@@ -40,6 +40,9 @@ static uint64_t rz_milliseconds(void)
 @property (nonatomic, strong) RZVideoDecoder *videoDecoder;
 
 @property (weak) IBOutlet RZVideoPlayView *playView;
+@property (weak) IBOutlet NSPopUpButton *pickDeviceButton;
+
+@property (nonatomic, strong) NSArray<AVCaptureDevice *> *devices;
 
 @end
 
@@ -62,6 +65,26 @@ static uint64_t rz_milliseconds(void)
     _videoDecoder = [[RZVideoDecoder alloc] initWithDelegate:self];
     
     _encodeQueue = dispatch_queue_create("com.video.encode.queue", DISPATCH_QUEUE_SERIAL);
+    
+    
+    self.devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    [self.pickDeviceButton removeAllItems];
+    
+    NSArray *titles = [self.devices valueForKeyPath:@"@unionOfObjects.localizedName"];
+    [self.pickDeviceButton addItemsWithTitles:titles];
+    [self.videoCapturer setCurrentInputDevice:self.devices.firstObject];
+    
+}
+- (IBAction)onClickPickDevice:(id)sender {
+    
+    NSInteger index = self.pickDeviceButton.indexOfSelectedItem;
+    
+    if (index < 0 || index >= self.devices.count) {
+        return;
+    }
+    
+    AVCaptureDevice *device = self.devices[index];
+    [self.videoCapturer setCurrentInputDevice:device];
 }
 
 
@@ -104,6 +127,7 @@ static uint64_t rz_milliseconds(void)
 
 - (void)videoEncoder:(nonnull RZVideoEncoder *)videoEncoder didEncodeH264:(nonnull void *)h264Data dataLength:(int)length isKeyFrame:(BOOL)isKeyFrame timestamp:(NSTimeInterval)timestamp
 {
+#if 0
     static double totalLength = 0;
     totalLength += length;
     
@@ -117,6 +141,7 @@ static uint64_t rz_milliseconds(void)
         double average = totalLength / duration;
         NSLog(@"bit rate = %.0f B, duration = %f", average, duration);
     }
+#endif
     
     [self.videoDecoder decodeH264:h264Data length:length timestamp:timestamp];
 }

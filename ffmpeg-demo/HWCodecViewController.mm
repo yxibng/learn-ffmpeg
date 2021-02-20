@@ -21,6 +21,9 @@
 
 @property (nonatomic, strong) dispatch_queue_t encodeQueue;
 
+@property (weak) IBOutlet NSPopUpButton *pickDeviceButton;
+@property (nonatomic, strong) NSArray<AVCaptureDevice *> *devices;
+
 @end
 
 @implementation HWCodecViewController
@@ -40,7 +43,27 @@
     _videoCapturer = [[RZVideoCapturer alloc] init];
     _videoCapturer.delegate = self;
     
+    self.devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    [self.pickDeviceButton removeAllItems];
+    
+    NSArray *titles = [self.devices valueForKeyPath:@"@unionOfObjects.localizedName"];
+    [self.pickDeviceButton addItemsWithTitles:titles];
+    [self.videoCapturer setCurrentInputDevice:self.devices.firstObject];
+    
 }
+
+- (IBAction)onClickPickDevice:(id)sender {
+    
+    NSInteger index = self.pickDeviceButton.indexOfSelectedItem;
+    
+    if (index < 0 || index >= self.devices.count) {
+        return;
+    }
+    
+    AVCaptureDevice *device = self.devices[index];
+    [self.videoCapturer setCurrentInputDevice:device];
+}
+
 
 
 - (IBAction)start:(id)sender {

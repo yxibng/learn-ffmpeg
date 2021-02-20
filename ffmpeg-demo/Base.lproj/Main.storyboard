@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="OUI-Mh-0nr">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -689,10 +690,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fjw-Ib-Ckj">
-                                <rect key="frame" x="408" y="20" width="52" height="50"/>
+                                <rect key="frame" x="389" y="20" width="71" height="80"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WkE-AK-1Ba">
-                                        <rect key="frame" x="-7" y="23" width="66" height="32"/>
+                                        <rect key="frame" x="3" y="53" width="66" height="32"/>
                                         <buttonCell key="cell" type="push" title="start " bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pA7-nV-rzH">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -702,7 +703,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mUk-TR-8IO">
-                                        <rect key="frame" x="-5" y="-7" width="62" height="32"/>
+                                        <rect key="frame" x="5" y="23" width="62" height="32"/>
                                         <buttonCell key="cell" type="push" title="stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I8B-P5-QwD">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -711,18 +712,37 @@
                                             <action selector="stop:" target="XfG-lQ-9wD" id="pm6-U9-RMe"/>
                                         </connections>
                                     </button>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iBy-Oy-0Va">
+                                        <rect key="frame" x="-3" y="-4" width="78" height="25"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FaQ-lR-11g" id="teZ-8a-9bX">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="bVN-ME-krB">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="FaQ-lR-11g"/>
+                                                    <menuItem title="Item 2" id="oeK-KR-czh"/>
+                                                    <menuItem title="Item 3" id="rei-fD-HVQ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="onClickPickDevice:" target="XfG-lQ-9wD" id="tJD-y4-sUf"/>
+                                        </connections>
+                                    </popUpButton>
                                 </subviews>
                                 <visibilityPriorities>
+                                    <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="YoG-c4-dYH" customClass="RZVideoPlayView">
-                                <rect key="frame" x="20" y="10" width="378" height="240"/>
+                                <rect key="frame" x="20" y="10" width="369" height="240"/>
                             </customView>
                         </subviews>
                         <constraints>
@@ -735,6 +755,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="pickDeviceButton" destination="iBy-Oy-0Va" id="wUQ-we-u0Q"/>
                         <outlet property="playView" destination="YoG-c4-dYH" id="zxa-l4-cpb"/>
                     </connections>
                 </viewController>
@@ -828,10 +849,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RAy-Tb-FWH">
-                                <rect key="frame" x="408" y="20" width="52" height="50"/>
+                                <rect key="frame" x="389" y="20" width="71" height="80"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6mg-NR-k4l">
-                                        <rect key="frame" x="-7" y="23" width="66" height="32"/>
+                                        <rect key="frame" x="3" y="53" width="66" height="32"/>
                                         <buttonCell key="cell" type="push" title="start " bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lFG-aK-5az">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -841,7 +862,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wKu-ZJ-kNc">
-                                        <rect key="frame" x="-5" y="-7" width="62" height="32"/>
+                                        <rect key="frame" x="5" y="23" width="62" height="32"/>
                                         <buttonCell key="cell" type="push" title="stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hrU-o8-UNg">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -850,18 +871,37 @@
                                             <action selector="stop:" target="pZ3-kQ-hve" id="U3t-P1-oVP"/>
                                         </connections>
                                     </button>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WE3-KV-Jyj">
+                                        <rect key="frame" x="-3" y="-4" width="78" height="25"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="y1N-xc-xeo" id="O73-sv-Szz">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="E7c-6C-PDI">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="y1N-xc-xeo"/>
+                                                    <menuItem title="Item 2" id="4T8-2R-6F1"/>
+                                                    <menuItem title="Item 3" id="Z7V-7a-eQ2"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="onClickPickDevice:" target="pZ3-kQ-hve" id="wpA-jS-6pS"/>
+                                        </connections>
+                                    </popUpButton>
                                 </subviews>
                                 <visibilityPriorities>
+                                    <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="59Q-3w-le4" customClass="RZVideoPlayView">
-                                <rect key="frame" x="20" y="10" width="378" height="240"/>
+                                <rect key="frame" x="20" y="10" width="369" height="240"/>
                             </customView>
                         </subviews>
                         <constraints>
@@ -874,6 +914,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="pickDeviceButton" destination="WE3-KV-Jyj" id="Nq8-3w-td6"/>
                         <outlet property="playView" destination="59Q-3w-le4" id="hni-dz-o0D"/>
                     </connections>
                 </viewController>
