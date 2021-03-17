@@ -198,6 +198,9 @@ void hw_CompressionOutputCallback (
     /*
      CMTime
      https://developer.apple.com/documentation/coremedia/cmtime-u58?language=objc
+     这里的设置有问题，可以参考：ffmpeg https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/videotoolboxenc.c
+     LINE: 2315
+     time = CMTimeMake(frame->pts * avctx->time_base.num, avctx->time_base.den);
      */
     CMTime pts = CMTimeMake(_pts++, 600);
     OSStatus status = VTCompressionSessionEncodeFrame(_compressionSession,
